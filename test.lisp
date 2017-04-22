@@ -33,3 +33,9 @@
 (print "Please have some factorials.")
 (print (map ! (range 1 13)))
 
+(print "LISP saps that 13 + 5! is:")
+(print (+ 13 (! 5)))
+
+"FORTH says that 13 + 5! is:" print
+13 (! 5) + print
+

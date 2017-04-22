@@ -347,6 +347,7 @@ static void initialize(void) {
 
     push(GLOBAL);
     DEFINE_NATFUN("cons",       core_cons);
+    DEFINE_NATFUN("decons",     core_decons);
     DEFINE_NATFUN("head",       core_head);
     DEFINE_NATFUN("tail",       core_tail);
     DEFINE_NATFUN("++",         core_append);
@@ -360,8 +361,16 @@ static void initialize(void) {
     DEFINE_NATFUN("lookup",     core_lookup);
     DEFINE_NATFUN("global",     core_global);
     DEFINE_NATFUN("global!",    core_setglobal);
+    DEFINE_NATFUN("parse",      core_parse);
     DEFINE_NATFUN("eval",       eval);
     DEFINE_NATFUN("print",      core_print);
+    DEFINE_NATFUN("swap",       core_swap);
+    DEFINE_NATFUN("dup",        core_dup);
+    DEFINE_NATFUN("drop",       core_drop);
+    DEFINE_NATFUN("over",       core_over);
+    DEFINE_NATFUN("nip",        core_nip);
+    DEFINE_NATFUN("rot",        core_rot);
+    DEFINE_NATFUN("execute",    core_execute);
     GLOBAL = pop();
 }
 
@@ -372,12 +381,12 @@ int main(void) {
         core_parse();
         if (TOS == TRUE) {
             core_drop();
-            //printf("expr:   "); print_expr(TOS); putchar('\n');
             push(GLOBAL);
-            //printf("env:    "); print_expr(TOS); putchar('\n');
             core_swap();
             eval();
-            core_drop();
+            if (obj_type(TOS) == TYPE_NATFUN) {
+                core_execute();
+            }
             //printf("result: "); print_expr(pop()); putchar('\n');
         } else {
             if (!feof(stdin)) {
